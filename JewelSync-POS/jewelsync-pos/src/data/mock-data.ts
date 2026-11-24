@@ -1,0 +1,827 @@
+import type {
+  StoreInfo, Staff, MetalRate, MetalRateHistory, ProductDesign,
+  JewelleryItem, Customer, Invoice, InvoiceItem, Payment,
+  ReturnRecord, ReturnItem, CreditNote, LedgerEntry,
+  LoyaltyTransaction, LoyaltyConfig, DailyClosing, RepairOrder,
+  LabelTemplate, TaxConfig, AppNotification, OldGoldExchange,
+  ExchangeRecord,
+} from '@/types';
+
+// ================================================================
+// STORE INFO
+// ================================================================
+export const demoStoreInfo: StoreInfo = {
+  id: 'store-001',
+  name: 'Shree Lakshmi Jewellers',
+  tradeName: 'Shree Lakshmi Jewellers',
+  legalName: 'Shree Lakshmi Jewellers Private Limited',
+  address: '42, Jewellers Street, T. Nagar',
+  city: 'Chennai',
+  state: 'Tamil Nadu',
+  stateCode: '33',
+  pincode: '600017',
+  phone: '+91 44 2434 5678',
+  email: 'info@shreelakshmijewellers.com',
+  gstin: '33AABCS1234F1ZP',
+  pan: 'AABCS1234F',
+  returnPolicy: 'Exchange within 15 days with original invoice. No cash refunds on gold items. Making charges are non-refundable.',
+  thankYouMessage: 'Thank you for shopping with Shree Lakshmi Jewellers! Your trust is our treasure.',
+};
+
+// ================================================================
+// STAFF
+// ================================================================
+export const demoStaff: Staff[] = [
+  { id: 'staff-001', name: 'Rajesh Kumar', role: 'Manager', email: 'rajesh@slj.com', phone: '9876543210', isActive: true },
+  { id: 'staff-002', name: 'Priya Sharma', role: 'Cashier', email: 'priya@slj.com', phone: '9876543211', isActive: true },
+  { id: 'staff-003', name: 'Arun Patel', role: 'Cashier', email: 'arun@slj.com', phone: '9876543212', isActive: true },
+];
+
+// ================================================================
+// TAX CONFIG
+// ================================================================
+export const demoTaxConfig: TaxConfig = {
+  isInterState: false,
+  defaultGstRate: 3,
+  categoryRates: {
+    'Gold Rings': 3,
+    'Gold Necklaces': 3,
+    'Gold Chains': 3,
+    'Bangles': 3,
+    'Earrings': 3,
+    'Bracelets': 3,
+    'Pendants': 3,
+    'Mangalsutra': 3,
+    'Diamond Jewellery': 3,
+    'Silver Jewellery': 3,
+    'Platinum Jewellery': 3,
+    'Coins': 3,
+    'Other': 3,
+  },
+};
+
+// ================================================================
+// LOYALTY CONFIG (1 Gram Jewellery Store)
+// ================================================================
+export const demoLoyaltyConfig: LoyaltyConfig = {
+  pointsPerRupee: 0.01, // Every ₹100 of eligible purchase = 1 loyalty point
+  pointValue: 0.1, // 100 points = ₹10 discount (1 point = ₹0.10)
+  minRedemptionPoints: 50,
+  maxRedemptionPercentage: 20,
+  slabs: [
+    { minSpend: 0, maxSpend: 10000, pointsMultiplier: 1 },
+    { minSpend: 10000, maxSpend: 50000, pointsMultiplier: 1.5 },
+    { minSpend: 50000, maxSpend: Infinity, pointsMultiplier: 2 },
+  ],
+};
+
+// ================================================================
+// METAL RATES
+// ================================================================
+export const demoMetalRates: MetalRate[] = [
+  { id: 'rate-001', metalType: 'Gold', purity: '24K', ratePerGram: 7850, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+  { id: 'rate-002', metalType: 'Gold', purity: '22K', ratePerGram: 7195, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+  { id: 'rate-003', metalType: 'Gold', purity: '20K', ratePerGram: 6540, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+  { id: 'rate-004', metalType: 'Gold', purity: '18K', ratePerGram: 5890, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+  { id: 'rate-005', metalType: 'Silver', purity: '999', ratePerGram: 98, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+  { id: 'rate-006', metalType: 'Silver', purity: '925', ratePerGram: 90, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+  { id: 'rate-007', metalType: 'Platinum', purity: '950', ratePerGram: 3250, updatedAt: '2026-11-21T10:00:00', updatedBy: 'staff-001' },
+];
+
+export const demoRateHistory: MetalRateHistory[] = [
+  { id: 'rh-001', metalType: 'Gold', purity: '24K', ratePerGram: 7820, date: '2026-11-20', updatedBy: 'staff-001' },
+  { id: 'rh-002', metalType: 'Gold', purity: '24K', ratePerGram: 7790, date: '2026-11-19', updatedBy: 'staff-001' },
+  { id: 'rh-003', metalType: 'Gold', purity: '24K', ratePerGram: 7810, date: '2026-11-18', updatedBy: 'staff-001' },
+  { id: 'rh-004', metalType: 'Gold', purity: '24K', ratePerGram: 7760, date: '2026-11-17', updatedBy: 'staff-001' },
+  { id: 'rh-005', metalType: 'Gold', purity: '24K', ratePerGram: 7800, date: '2026-11-16', updatedBy: 'staff-001' },
+  { id: 'rh-006', metalType: 'Silver', purity: '999', ratePerGram: 96, date: '2026-11-20', updatedBy: 'staff-001' },
+  { id: 'rh-007', metalType: 'Silver', purity: '999', ratePerGram: 95, date: '2026-11-19', updatedBy: 'staff-001' },
+];
+
+// ================================================================
+// PRODUCT DESIGNS (Master)
+// ================================================================
+export const demoProductDesigns: ProductDesign[] = [
+  { id: 'pd-001', name: 'Royal Heritage Necklace', category: 'Gold Necklaces', designCode: 'GN-RH-001', description: 'Traditional temple jewellery necklace with intricate carvings', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-01-15' },
+  { id: 'pd-002', name: 'Lotus Ring', category: 'Gold Rings', designCode: 'GR-LT-001', description: 'Elegant lotus flower motif gold ring', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-02-10' },
+  { id: 'pd-003', name: 'Classic Rope Chain', category: 'Gold Chains', designCode: 'GC-RC-001', description: 'Classic 22K gold rope chain for men', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-03-05' },
+  { id: 'pd-004', name: 'Bridal Bangle Set', category: 'Bangles', designCode: 'GB-BS-001', description: 'Set of 4 intricately designed bridal bangles', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-01-20' },
+  { id: 'pd-005', name: 'Diamond Solitaire Earrings', category: 'Diamond Jewellery', designCode: 'DE-SE-001', description: 'Brilliant cut solitaire diamond earrings in 18K white gold', metalType: 'Diamond', defaultPurity: '18K', isActive: true, createdAt: '2026-04-12' },
+  { id: 'pd-006', name: 'Silver Anklet Pair', category: 'Silver Jewellery', designCode: 'SA-AP-001', description: 'Traditional silver anklet pair with bell charms', metalType: 'Silver', defaultPurity: '925', isActive: true, createdAt: '2026-05-08' },
+  { id: 'pd-007', name: 'Lakshmi Pendant', category: 'Pendants', designCode: 'GP-LP-001', description: 'Goddess Lakshmi gold pendant with enamel work', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-06-15' },
+  { id: 'pd-008', name: 'Wedding Mangalsutra', category: 'Mangalsutra', designCode: 'GM-WM-001', description: 'Traditional black bead mangalsutra with gold pendant', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-02-28' },
+  { id: 'pd-009', name: 'Gold Coin 10g', category: 'Coins', designCode: 'GC-10-001', description: '24K 999 purity gold coin - 10 gram', metalType: 'Gold', defaultPurity: '24K', isActive: true, createdAt: '2026-01-01' },
+  { id: 'pd-010', name: 'Platinum Band Ring', category: 'Platinum Jewellery', designCode: 'PR-BR-001', description: 'Elegant platinum band ring for men', metalType: 'Platinum', defaultPurity: '950', isActive: true, createdAt: '2026-07-01' },
+  { id: 'pd-011', name: 'Tennis Bracelet', category: 'Bracelets', designCode: 'DB-TB-001', description: 'Diamond tennis bracelet in 18K gold', metalType: 'Diamond', defaultPurity: '18K', isActive: true, createdAt: '2026-03-20' },
+  { id: 'pd-012', name: 'Jhumka Earrings', category: 'Earrings', designCode: 'GE-JK-001', description: 'Traditional South Indian gold jhumka earrings', metalType: 'Gold', defaultPurity: '22K', isActive: true, createdAt: '2026-04-05' },
+  { id: 'pd-013', name: '1 Gram Gold Temple Haram', category: '1 Gram Gold Jewellery', designCode: 'OG-TH-001', description: 'Traditional temple long haram with 1 gram micro gold plating', metalType: '1 Gram Gold', defaultPurity: '1gm Micro Plated', isActive: true, createdAt: '2026-11-01' },
+  { id: 'pd-014', name: '1 Gram Gold Bridal Choker Set', category: '1 Gram Gold Jewellery', designCode: 'OG-BC-001', description: 'Kundan and kemp stone micro-plated bridal choker set', metalType: '1 Gram Gold', defaultPurity: '1gm Micro Plated', isActive: true, createdAt: '2026-11-05' },
+  { id: 'pd-015', name: '1 Gram Gold Antique Bangles', category: '1 Gram Gold Jewellery', designCode: 'OG-AB-001', description: 'Designer micro gold plated daily and bridal bangles', metalType: '1 Gram Gold', defaultPurity: '1gm Micro Plated', isActive: true, createdAt: '2026-11-10' },
+];
+
+// ================================================================
+// JEWELLERY ITEMS (Individual pieces)
+// ================================================================
+export const demoJewelleryItems: JewelleryItem[] = [
+  {
+    id: 'item-001', productDesignId: 'pd-001', name: 'Royal Heritage Necklace - A1', sku: 'GN-RH-001-A1', barcode: '200100001001', itemCode: 'JW100001',
+    category: 'Gold Necklaces', description: 'Traditional temple jewellery necklace', designCode: 'GN-RH-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 45.200, netWeight: 43.800, stoneWeight: 1.400, huid: 'ABCD1234EF', makingChargeType: 'per_gram', makingChargeValue: 650,
+    wastageType: 'percentage', wastageValue: 8, stoneValue: 2500, additionalCharges: 0, discount: 0,
+    sellingPrice: 371543, currentValuation: 371543, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray A1', supplier: 'Tanishq Wholesale', dateAdded: '2026-10-01', isActive: true,
+  },
+  {
+    id: 'item-002', productDesignId: 'pd-001', name: 'Royal Heritage Necklace - A2', sku: 'GN-RH-001-A2', barcode: '200100001002', itemCode: 'JW100002',
+    category: 'Gold Necklaces', description: 'Traditional temple jewellery necklace - heavier variant', designCode: 'GN-RH-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 52.800, netWeight: 51.200, stoneWeight: 1.600, huid: 'EFGH5678IJ', makingChargeType: 'per_gram', makingChargeValue: 650,
+    wastageType: 'percentage', wastageValue: 8, stoneValue: 3200, additionalCharges: 0, discount: 0,
+    sellingPrice: 434156, currentValuation: 434156, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray A1', supplier: 'Tanishq Wholesale', dateAdded: '2026-10-05', isActive: true,
+  },
+  {
+    id: 'item-003', productDesignId: 'pd-002', name: 'Lotus Ring - R1', sku: 'GR-LT-001-R1', barcode: '200100002001', itemCode: 'JW100003',
+    category: 'Gold Rings', description: 'Elegant lotus flower motif ring - Size 16', designCode: 'GR-LT-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 5.200, netWeight: 5.200, stoneWeight: 0, makingChargeType: 'percentage', makingChargeValue: 12,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 43782, currentValuation: 43782, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray B2', supplier: 'Local Artisan', dateAdded: '2026-09-15', isActive: true,
+  },
+  {
+    id: 'item-004', productDesignId: 'pd-002', name: 'Lotus Ring - R2', sku: 'GR-LT-001-R2', barcode: '200100002002', itemCode: 'JW100004',
+    category: 'Gold Rings', description: 'Elegant lotus flower motif ring - Size 18', designCode: 'GR-LT-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 5.600, netWeight: 5.600, stoneWeight: 0, makingChargeType: 'percentage', makingChargeValue: 12,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 47150, currentValuation: 47150, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray B2', supplier: 'Local Artisan', dateAdded: '2026-09-15', isActive: true,
+  },
+  {
+    id: 'item-005', productDesignId: 'pd-003', name: 'Classic Rope Chain - 20inch', sku: 'GC-RC-001-20', barcode: '200100003001', itemCode: 'JW100005',
+    category: 'Gold Chains', description: '22K gold rope chain, 20 inches for men', designCode: 'GC-RC-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 25.000, netWeight: 25.000, stoneWeight: 0, makingChargeType: 'per_gram', makingChargeValue: 500,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 210375, currentValuation: 210375, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray C1', supplier: 'Chain Masters', dateAdded: '2026-08-20', isActive: true,
+  },
+  {
+    id: 'item-006', productDesignId: 'pd-004', name: 'Bridal Bangle Set - Medium', sku: 'GB-BS-001-M', barcode: '200100004001', itemCode: 'JW100006',
+    category: 'Bangles', description: 'Set of 4 bridal bangles, size 2.6', designCode: 'GB-BS-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 80.000, netWeight: 78.500, stoneWeight: 1.500, makingChargeType: 'per_gram', makingChargeValue: 550,
+    wastageType: 'percentage', wastageValue: 6, stoneValue: 4500, additionalCharges: 500, discount: 0,
+    sellingPrice: 648250, currentValuation: 648250, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray D1', supplier: 'Heritage Crafts', dateAdded: '2026-10-10', isActive: true,
+  },
+  {
+    id: 'item-007', productDesignId: 'pd-005', name: 'Diamond Solitaire Earrings - 0.5ct', sku: 'DE-SE-001-05', barcode: '200100005001', itemCode: 'JW100007',
+    category: 'Diamond Jewellery', description: '0.5 carat solitaire diamond earrings in 18K white gold', designCode: 'DE-SE-001',
+    metalType: 'Gold', purity: '18K', grossWeight: 4.800, netWeight: 3.800, stoneWeight: 0, diamondCaratWeight: 0.5,
+    diamondDetails: { stoneCount: 2, totalCarat: 0.5, colour: 'F', clarity: 'VS1', cut: 'Excellent', certificationRef: 'GIA-2026-78901' },
+    makingChargeType: 'fixed', makingChargeValue: 8500, wastageType: 'percentage', wastageValue: 3,
+    stoneValue: 85000, additionalCharges: 1500, discount: 0,
+    sellingPrice: 120500, currentValuation: 120500, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Diamond Case 1', supplier: 'Diamond House', dateAdded: '2026-07-15', isActive: true,
+  },
+  {
+    id: 'item-008', productDesignId: 'pd-006', name: 'Silver Anklet Pair - Traditional', sku: 'SA-AP-001-T', barcode: '200100006001', itemCode: 'JW100008',
+    category: 'Silver Jewellery', description: 'Traditional silver anklet pair with bell charms', designCode: 'SA-AP-001', metalType: 'Silver', purity: '925',
+    grossWeight: 120.000, netWeight: 118.000, stoneWeight: 0, makingChargeType: 'fixed', makingChargeValue: 1200,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 12850, currentValuation: 12850, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Silver Case', supplier: 'Silver Works', dateAdded: '2026-09-01', isActive: true,
+  },
+  {
+    id: 'item-009', productDesignId: 'pd-007', name: 'Lakshmi Pendant - LP1', sku: 'GP-LP-001-LP1', barcode: '200100007001', itemCode: 'JW100009',
+    category: 'Pendants', description: 'Goddess Lakshmi gold pendant with enamel work', designCode: 'GP-LP-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 8.500, netWeight: 8.200, stoneWeight: 0.300, makingChargeType: 'percentage', makingChargeValue: 15,
+    wastageType: 'percentage', wastageValue: 4, stoneValue: 1800, additionalCharges: 500, discount: 0,
+    sellingPrice: 74200, currentValuation: 74200, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray E1', supplier: 'Temple Jewels', dateAdded: '2026-08-15', isActive: true,
+  },
+  {
+    id: 'item-010', productDesignId: 'pd-008', name: 'Wedding Mangalsutra - WM1', sku: 'GM-WM-001-WM1', barcode: '200100008001', itemCode: 'JW100010',
+    category: 'Mangalsutra', description: 'Traditional black bead mangalsutra', designCode: 'GM-WM-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 15.000, netWeight: 12.500, stoneWeight: 0, makingChargeType: 'per_gram', makingChargeValue: 600,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 1200, discount: 0,
+    sellingPrice: 106500, currentValuation: 106500, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray E2', supplier: 'Heritage Crafts', dateAdded: '2026-09-20', isActive: true,
+  },
+  {
+    id: 'item-011', productDesignId: 'pd-009', name: 'Gold Coin 10g - 24K', sku: 'GC-10-001', barcode: '200100009001', itemCode: 'JW100011',
+    category: 'Coins', description: '24K 999 purity gold coin - 10 gram', designCode: 'GC-10-001', metalType: 'Gold', purity: '24K',
+    grossWeight: 10.000, netWeight: 10.000, stoneWeight: 0, makingChargeType: 'fixed', makingChargeValue: 500,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 200, discount: 0,
+    sellingPrice: 79200, currentValuation: 79200, gstRate: 3, hsnCode: '7118',
+    stockStatus: 'Available', stockQuantity: 15, isQuantityBased: true, location: 'Coin Vault', supplier: 'MMTC-PAMP', dateAdded: '2026-01-01', isActive: true,
+  },
+  {
+    id: 'item-012', productDesignId: 'pd-010', name: 'Platinum Band Ring - PB1', sku: 'PR-BR-001-PB1', barcode: '200100010001', itemCode: 'JW100012',
+    category: 'Platinum Jewellery', description: 'Elegant platinum band ring for men - Size 20', designCode: 'PR-BR-001', metalType: 'Platinum', purity: '950',
+    grossWeight: 8.000, netWeight: 8.000, stoneWeight: 0, makingChargeType: 'fixed', makingChargeValue: 3500,
+    wastageType: 'percentage', wastageValue: 3, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 30430, currentValuation: 30430, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Platinum Case', supplier: 'Platinum Guild', dateAdded: '2026-06-01', isActive: true,
+  },
+  {
+    id: 'item-013', productDesignId: 'pd-011', name: 'Tennis Bracelet - 2ct', sku: 'DB-TB-001-2CT', barcode: '200100011001', itemCode: 'JW100013',
+    category: 'Bracelets', description: '2 carat diamond tennis bracelet in 18K gold', designCode: 'DB-TB-001', metalType: 'Gold', purity: '18K',
+    grossWeight: 12.500, netWeight: 10.200, stoneWeight: 0, diamondCaratWeight: 2.0,
+    diamondDetails: { stoneCount: 42, totalCarat: 2.0, colour: 'G', clarity: 'VS2', cut: 'Very Good', certificationRef: 'IGI-2026-45678' },
+    makingChargeType: 'fixed', makingChargeValue: 15000, wastageType: 'percentage', wastageValue: 3,
+    stoneValue: 280000, additionalCharges: 2000, discount: 0,
+    sellingPrice: 362500, currentValuation: 362500, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Diamond Case 2', supplier: 'Diamond House', dateAdded: '2026-05-10', isActive: true,
+  },
+  {
+    id: 'item-014', productDesignId: 'pd-012', name: 'Jhumka Earrings - JK1', sku: 'GE-JK-001-JK1', barcode: '200100012001', itemCode: 'JW100014',
+    category: 'Earrings', description: 'Traditional South Indian gold jhumka earrings', designCode: 'GE-JK-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 18.500, netWeight: 17.800, stoneWeight: 0.700, makingChargeType: 'per_gram', makingChargeValue: 700,
+    wastageType: 'percentage', wastageValue: 6, stoneValue: 3500, additionalCharges: 0, discount: 0,
+    sellingPrice: 155800, currentValuation: 155800, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray F1', supplier: 'Temple Jewels', dateAdded: '2026-10-15', isActive: true,
+  },
+  {
+    id: 'item-015', productDesignId: 'pd-002', name: 'Lotus Ring - R3', sku: 'GR-LT-001-R3', barcode: '200100002003', itemCode: 'JW100015',
+    category: 'Gold Rings', description: 'Elegant lotus flower motif ring - Size 14', designCode: 'GR-LT-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 4.800, netWeight: 4.800, stoneWeight: 0, makingChargeType: 'percentage', makingChargeValue: 12,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 40414, currentValuation: 40414, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray B2', supplier: 'Local Artisan', dateAdded: '2026-10-20', isActive: true,
+  },
+  {
+    id: 'item-016', productDesignId: 'pd-003', name: 'Classic Rope Chain - 24inch', sku: 'GC-RC-001-24', barcode: '200100003002', itemCode: 'JW100016',
+    category: 'Gold Chains', description: '22K gold rope chain, 24 inches for men', designCode: 'GC-RC-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 30.000, netWeight: 30.000, stoneWeight: 0, makingChargeType: 'per_gram', makingChargeValue: 500,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 252450, currentValuation: 252450, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray C1', supplier: 'Chain Masters', dateAdded: '2026-08-25', isActive: true,
+  },
+  {
+    id: 'item-017', productDesignId: 'pd-004', name: 'Bridal Bangle Set - Large', sku: 'GB-BS-001-L', barcode: '200100004002', itemCode: 'JW100017',
+    category: 'Bangles', description: 'Set of 4 bridal bangles, size 2.8', designCode: 'GB-BS-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 85.500, netWeight: 84.000, stoneWeight: 1.500, makingChargeType: 'per_gram', makingChargeValue: 550,
+    wastageType: 'percentage', wastageValue: 6, stoneValue: 4500, additionalCharges: 500, discount: 0,
+    sellingPrice: 693125, currentValuation: 693125, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray D1', supplier: 'Heritage Crafts', dateAdded: '2026-10-12', isActive: true,
+  },
+  {
+    id: 'item-018', productDesignId: 'pd-012', name: 'Jhumka Earrings - JK2', sku: 'GE-JK-001-JK2', barcode: '200100012002', itemCode: 'JW100018',
+    category: 'Earrings', description: 'Traditional South Indian gold jhumka - lighter variant', designCode: 'GE-JK-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 12.200, netWeight: 11.800, stoneWeight: 0.400, makingChargeType: 'per_gram', makingChargeValue: 700,
+    wastageType: 'percentage', wastageValue: 6, stoneValue: 2000, additionalCharges: 0, discount: 0,
+    sellingPrice: 103250, currentValuation: 103250, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray F1', supplier: 'Temple Jewels', dateAdded: '2026-10-18', isActive: true,
+  },
+  {
+    id: 'item-019', productDesignId: 'pd-009', name: 'Gold Coin 5g - 24K', sku: 'GC-05-001', barcode: '200100009002', itemCode: 'JW100019',
+    category: 'Coins', description: '24K 999 purity gold coin - 5 gram', designCode: 'GC-05-001', metalType: 'Gold', purity: '24K',
+    grossWeight: 5.000, netWeight: 5.000, stoneWeight: 0, makingChargeType: 'fixed', makingChargeValue: 300,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 100, discount: 0,
+    sellingPrice: 39650, currentValuation: 39650, gstRate: 3, hsnCode: '7118',
+    stockStatus: 'Available', stockQuantity: 20, isQuantityBased: true, location: 'Coin Vault', supplier: 'MMTC-PAMP', dateAdded: '2026-01-01', isActive: true,
+  },
+  {
+    id: 'item-020', productDesignId: 'pd-007', name: 'Lakshmi Pendant - LP2', sku: 'GP-LP-001-LP2', barcode: '200100007002', itemCode: 'JW100020',
+    category: 'Pendants', description: 'Goddess Lakshmi gold pendant - larger variant', designCode: 'GP-LP-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 12.000, netWeight: 11.500, stoneWeight: 0.500, makingChargeType: 'percentage', makingChargeValue: 15,
+    wastageType: 'percentage', wastageValue: 4, stoneValue: 2800, additionalCharges: 500, discount: 0,
+    sellingPrice: 103650, currentValuation: 103650, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Available', stockQuantity: 1, isQuantityBased: false, location: 'Tray E1', supplier: 'Temple Jewels', dateAdded: '2026-09-01', isActive: true,
+  },
+  // Sold items for history
+  {
+    id: 'item-021', productDesignId: 'pd-002', name: 'Lotus Ring - R4 (Sold)', sku: 'GR-LT-001-R4', barcode: '200100002004', itemCode: 'JW100021',
+    category: 'Gold Rings', description: 'Elegant lotus flower motif ring - Size 15', designCode: 'GR-LT-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 5.000, netWeight: 5.000, stoneWeight: 0, makingChargeType: 'percentage', makingChargeValue: 12,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 42098, currentValuation: 42098, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Sold', stockQuantity: 0, isQuantityBased: false, location: 'Tray B2', supplier: 'Local Artisan', dateAdded: '2026-08-01', isActive: true,
+  },
+  {
+    id: 'item-022', productDesignId: 'pd-003', name: 'Classic Rope Chain - 22inch (Sold)', sku: 'GC-RC-001-22', barcode: '200100003003', itemCode: 'JW100022',
+    category: 'Gold Chains', description: '22K gold rope chain, 22 inches', designCode: 'GC-RC-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 27.500, netWeight: 27.500, stoneWeight: 0, makingChargeType: 'per_gram', makingChargeValue: 500,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 231413, currentValuation: 231413, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Sold', stockQuantity: 0, isQuantityBased: false, location: 'Tray C1', supplier: 'Chain Masters', dateAdded: '2026-07-15', isActive: true,
+  },
+  {
+    id: 'item-023', productDesignId: 'pd-009', name: 'Gold Coin 10g - Sold Batch', sku: 'GC-10-001-B1', barcode: '200100009003', itemCode: 'JW100023',
+    category: 'Coins', description: '24K gold coin - 10g (sold batch)', designCode: 'GC-10-001', metalType: 'Gold', purity: '24K',
+    grossWeight: 10.000, netWeight: 10.000, stoneWeight: 0, makingChargeType: 'fixed', makingChargeValue: 500,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 200, discount: 0,
+    sellingPrice: 79200, currentValuation: 79200, gstRate: 3, hsnCode: '7118',
+    stockStatus: 'Sold', stockQuantity: 0, isQuantityBased: true, location: 'Coin Vault', supplier: 'MMTC-PAMP', dateAdded: '2026-01-01', isActive: true,
+  },
+  {
+    id: 'item-024', productDesignId: 'pd-008', name: 'Wedding Mangalsutra - WM2 (Sold)', sku: 'GM-WM-001-WM2', barcode: '200100008002', itemCode: 'JW100024',
+    category: 'Mangalsutra', description: 'Traditional mangalsutra - sold piece', designCode: 'GM-WM-001', metalType: 'Gold', purity: '22K',
+    grossWeight: 18.000, netWeight: 15.500, stoneWeight: 0, makingChargeType: 'per_gram', makingChargeValue: 600,
+    wastageType: 'percentage', wastageValue: 5, stoneValue: 0, additionalCharges: 1200, discount: 0,
+    sellingPrice: 128750, currentValuation: 128750, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Sold', stockQuantity: 0, isQuantityBased: false, location: 'Tray E2', supplier: 'Heritage Crafts', dateAdded: '2026-08-01', isActive: true,
+  },
+  {
+    id: 'item-025', productDesignId: 'pd-005', name: 'Diamond Solitaire Earrings - 0.3ct (Sold)', sku: 'DE-SE-001-03', barcode: '200100005002', itemCode: 'JW100025',
+    category: 'Diamond Jewellery', description: '0.3 carat solitaire diamond earrings', designCode: 'DE-SE-001',
+    metalType: 'Gold', purity: '18K', grossWeight: 3.800, netWeight: 3.200, stoneWeight: 0, diamondCaratWeight: 0.3,
+    diamondDetails: { stoneCount: 2, totalCarat: 0.3, colour: 'G', clarity: 'VS2', cut: 'Very Good' },
+    makingChargeType: 'fixed', makingChargeValue: 6500, wastageType: 'percentage', wastageValue: 3,
+    stoneValue: 55000, additionalCharges: 1000, discount: 0,
+    sellingPrice: 82500, currentValuation: 82500, gstRate: 3, hsnCode: '7113',
+    stockStatus: 'Sold', stockQuantity: 0, isQuantityBased: false, location: 'Diamond Case 1', supplier: 'Diamond House', dateAdded: '2026-06-15', isActive: true,
+  },
+  // 1 Gram Gold & Imitation Jewellery (Piece / MRP Priced under HSN 7117)
+  {
+    id: 'item-026', productDesignId: 'pd-013', name: '1 Gram Gold Temple Matte Haram', sku: 'OG-TH-001-A1', barcode: '200100026001', itemCode: 'JW100026',
+    category: '1 Gram Gold Jewellery', description: 'Traditional South Indian temple haram in 1 gram micro gold plating with Lakshmi pendant motif', designCode: 'OG-TH-001',
+    metalType: '1 Gram Gold', purity: '1gm Micro Plated',
+    grossWeight: 65.000, netWeight: 65.000, stoneWeight: 0,
+    makingChargeType: 'fixed', makingChargeValue: 0,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 3450, currentValuation: 3450, gstRate: 3, hsnCode: '7117',
+    stockStatus: 'Available', stockQuantity: 8, isQuantityBased: true, location: '1G Display Section', supplier: 'Kavitha Imitation Crafts', dateAdded: '2026-11-01', isActive: true,
+  },
+  {
+    id: 'item-027', productDesignId: 'pd-014', name: '1 Gram Gold Bridal Choker Set', sku: 'OG-BC-001-A1', barcode: '200100027001', itemCode: 'JW100027',
+    category: '1 Gram Gold Jewellery', description: 'Royal bridal choker set with matching jhumkas in high-finish micro gold plating', designCode: 'OG-BC-001',
+    metalType: '1 Gram Gold', purity: '1gm Micro Plated',
+    grossWeight: 48.000, netWeight: 45.000, stoneWeight: 3.000,
+    makingChargeType: 'fixed', makingChargeValue: 0,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 2850, currentValuation: 2850, gstRate: 3, hsnCode: '7117',
+    stockStatus: 'Available', stockQuantity: 5, isQuantityBased: true, location: '1G Display Section', supplier: 'Kavitha Imitation Crafts', dateAdded: '2026-11-05', isActive: true,
+  },
+  {
+    id: 'item-028', productDesignId: 'pd-015', name: '1 Gram Gold Kemp Antique Bangles (Pair)', sku: 'OG-AB-001-P1', barcode: '200100028001', itemCode: 'JW100028',
+    category: '1 Gram Gold Jewellery', description: 'Kemp stone studded antique finish 1gm gold plated designer bangles (2.6 & 2.8 size)', designCode: 'OG-AB-001',
+    metalType: '1 Gram Gold', purity: '1gm Micro Plated',
+    grossWeight: 38.000, netWeight: 38.000, stoneWeight: 0,
+    makingChargeType: 'fixed', makingChargeValue: 0,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 1850, currentValuation: 1850, gstRate: 3, hsnCode: '7117',
+    stockStatus: 'Available', stockQuantity: 12, isQuantityBased: true, location: '1G Bangle Tray B1', supplier: 'Sri Krishna Imitations', dateAdded: '2026-11-10', isActive: true,
+  },
+  {
+    id: 'item-029', productDesignId: 'pd-013', name: '1 Gram Gold Daily Wear Rope Chain (24")', sku: 'OG-DC-001-24', barcode: '200100029001', itemCode: 'JW100029',
+    category: '1 Gram Gold Jewellery', description: 'Durable daily wear 24-inch micro-plated machine rope chain with micro lacquer coating', designCode: 'OG-TH-001',
+    metalType: '1 Gram Gold', purity: '1gm Micro Plated',
+    grossWeight: 22.000, netWeight: 22.000, stoneWeight: 0,
+    makingChargeType: 'fixed', makingChargeValue: 0,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 950, currentValuation: 950, gstRate: 3, hsnCode: '7117',
+    stockStatus: 'Available', stockQuantity: 20, isQuantityBased: true, location: '1G Chain Stand', supplier: 'Sri Krishna Imitations', dateAdded: '2026-11-12', isActive: true,
+  },
+  {
+    id: 'item-030', productDesignId: 'pd-014', name: '1 Gram Gold Peacock Jhumka Earrings', sku: 'OG-PJ-001-E1', barcode: '200100030001', itemCode: 'JW100030',
+    category: '1 Gram Gold Jewellery', description: 'South Indian traditional peacock motif kemp stone bell jhumkas with pearl drops', designCode: 'OG-BC-001',
+    metalType: '1 Gram Gold', purity: '1gm Micro Plated',
+    grossWeight: 16.500, netWeight: 16.500, stoneWeight: 0,
+    makingChargeType: 'fixed', makingChargeValue: 0,
+    wastageType: 'fixed_amount', wastageValue: 0, stoneValue: 0, additionalCharges: 0, discount: 0,
+    sellingPrice: 1250, currentValuation: 1250, gstRate: 3, hsnCode: '7117',
+    stockStatus: 'Available', stockQuantity: 15, isQuantityBased: true, location: '1G Earring Stand', supplier: 'Sri Krishna Imitations', dateAdded: '2026-11-12', isActive: true,
+  },
+];
+
+// ================================================================
+// CUSTOMERS
+// ================================================================
+export const demoCustomers: Customer[] = [
+  { id: 'cust-001', fullName: 'Meena Raghavan', mobile: '9876543001', email: 'meena.r@gmail.com', address: '15, Anna Nagar, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600040', category: 'Premium', registrationDate: '2024-03-15', loyaltyPoints: 2450, totalSpent: 985000, totalPurchases: 8, outstandingBalance: 0, storeCredit: 5000, lastPurchaseDate: '2026-11-15', isActive: true },
+  { id: 'cust-002', fullName: 'Suresh Iyer', mobile: '9876543002', email: 'suresh.iyer@outlook.com', address: '28, Mylapore, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600004', category: 'Regular', registrationDate: '2025-06-20', loyaltyPoints: 850, totalSpent: 342000, totalPurchases: 4, outstandingBalance: 15000, storeCredit: 0, lastPurchaseDate: '2026-10-28', isActive: true },
+  { id: 'cust-003', fullName: 'Lakshmi Venkatesh', mobile: '9876543003', email: 'lakshmi.v@yahoo.com', address: '42, Adyar, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600020', category: 'Premium', registrationDate: '2023-11-10', loyaltyPoints: 5200, totalSpent: 1850000, totalPurchases: 15, outstandingBalance: 0, storeCredit: 12000, lastPurchaseDate: '2026-11-18', isActive: true },
+  { id: 'cust-004', fullName: 'Karthik Raman', mobile: '9876543004', address: '5, T. Nagar, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600017', category: 'Regular', registrationDate: '2026-01-05', loyaltyPoints: 320, totalSpent: 128000, totalPurchases: 2, outstandingBalance: 0, storeCredit: 0, lastPurchaseDate: '2026-09-10', isActive: true },
+  { id: 'cust-005', fullName: 'Anjali Krishnan', mobile: '9876543005', email: 'anjali.k@gmail.com', address: '33, Velachery, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600042', category: 'Regular', registrationDate: '2025-08-15', loyaltyPoints: 680, totalSpent: 275000, totalPurchases: 3, outstandingBalance: 8500, storeCredit: 0, lastPurchaseDate: '2026-11-01', isActive: true },
+  { id: 'cust-006', fullName: 'Ramesh Sundaram', mobile: '9876543006', email: 'ramesh.s@hotmail.com', address: '12, Nungambakkam, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600034', gstin: '33BBBPR1234Q1ZX', category: 'Wholesale', registrationDate: '2024-06-01', loyaltyPoints: 8900, totalSpent: 4250000, totalPurchases: 25, outstandingBalance: 125000, storeCredit: 0, lastPurchaseDate: '2026-11-20', isActive: true },
+  { id: 'cust-007', fullName: 'Divya Prakash', mobile: '9876543007', address: '7, Porur, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600116', category: 'Regular', registrationDate: '2026-05-10', loyaltyPoints: 150, totalSpent: 65000, totalPurchases: 1, outstandingBalance: 0, storeCredit: 0, lastPurchaseDate: '2026-05-10', isActive: true },
+  { id: 'cust-008', fullName: 'Vijay Anand', mobile: '9876543008', email: 'vijay.a@gmail.com', address: '21, Ashok Nagar, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600083', category: 'Premium', registrationDate: '2024-01-15', loyaltyPoints: 3800, totalSpent: 1450000, totalPurchases: 12, outstandingBalance: 0, storeCredit: 8500, lastPurchaseDate: '2026-11-10', isActive: true },
+  { id: 'cust-009', fullName: 'Preethi Murugan', mobile: '9876543009', address: '9, Chromepet, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600044', category: 'Regular', registrationDate: '2026-08-20', loyaltyPoints: 220, totalSpent: 89000, totalPurchases: 2, outstandingBalance: 0, storeCredit: 0, lastPurchaseDate: '2026-10-05', isActive: true },
+  { id: 'cust-010', fullName: 'Ganesh Bharathi', mobile: '9876543010', email: 'ganesh.b@gmail.com', address: '45, Tambaram, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600045', category: 'Regular', registrationDate: '2025-12-01', loyaltyPoints: 450, totalSpent: 180000, totalPurchases: 3, outstandingBalance: 5000, storeCredit: 0, lastPurchaseDate: '2026-10-15', isActive: true },
+  { id: 'cust-011', fullName: 'Saroja Devi', mobile: '9876543011', address: '18, Triplicane, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600005', category: 'Premium', registrationDate: '2023-05-20', loyaltyPoints: 6100, totalSpent: 2250000, totalPurchases: 18, outstandingBalance: 0, storeCredit: 15000, lastPurchaseDate: '2026-11-19', isActive: true },
+  { id: 'cust-012', fullName: 'Ashwin Kumar', mobile: '9876543012', address: '30, KK Nagar, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600078', category: 'Regular', registrationDate: '2026-09-15', loyaltyPoints: 100, totalSpent: 42000, totalPurchases: 1, outstandingBalance: 0, storeCredit: 0, lastPurchaseDate: '2026-09-15', isActive: true },
+  { id: 'cust-013', fullName: 'Revathi Shankar', mobile: '9876543013', email: 'revathi.s@gmail.com', address: '56, Alwarpet, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600018', category: 'Premium', registrationDate: '2024-09-01', loyaltyPoints: 4100, totalSpent: 1620000, totalPurchases: 10, outstandingBalance: 0, storeCredit: 10000, lastPurchaseDate: '2026-11-12', isActive: true },
+  { id: 'cust-014', fullName: 'Mohan Das', mobile: '9876543014', address: '14, Egmore, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600008', category: 'Regular', registrationDate: '2026-02-28', loyaltyPoints: 280, totalSpent: 112000, totalPurchases: 2, outstandingBalance: 0, storeCredit: 0, lastPurchaseDate: '2026-07-20', isActive: true },
+  { id: 'cust-015', fullName: 'Padma Narayanan', mobile: '9876543015', email: 'padma.n@outlook.com', address: '25, Besant Nagar, Chennai', city: 'Chennai', state: 'Tamil Nadu', pincode: '600090', category: 'Wholesale', registrationDate: '2024-04-10', loyaltyPoints: 7500, totalSpent: 3800000, totalPurchases: 20, outstandingBalance: 85000, storeCredit: 0, lastPurchaseDate: '2026-11-21', isActive: true },
+];
+
+// ================================================================
+// HISTORICAL INVOICES
+// ================================================================
+function createInvoiceItem(item: JewelleryItem, qty: number = 1): InvoiceItem {
+  const metalRate = item.metalType === 'Gold' ? 7195 : item.metalType === 'Silver' ? 90 : 3250;
+  return {
+    id: `ii-${item.id}`,
+    jewelleryItemId: item.id,
+    name: item.name,
+    itemCode: item.itemCode,
+    barcode: item.barcode,
+    category: item.category,
+    metalType: item.metalType,
+    purity: item.purity,
+    huid: item.huid,
+    grossWeight: item.grossWeight,
+    netWeight: item.netWeight,
+    stoneWeight: item.stoneWeight,
+    quantity: qty,
+    metalRate,
+    metalValue: item.netWeight * metalRate,
+    makingCharges: item.makingChargeType === 'fixed' ? item.makingChargeValue : item.makingChargeValue * item.netWeight,
+    wastageCharges: item.wastageValue > 0 ? (item.wastageType === 'percentage' ? (item.wastageValue / 100) * item.netWeight * metalRate : item.wastageValue) : 0,
+    stoneValue: item.stoneValue,
+    additionalCharges: item.additionalCharges,
+    discount: 0,
+    taxableValue: item.sellingPrice / 1.03,
+    gstRate: 3,
+    cgst: (item.sellingPrice / 1.03) * 0.015,
+    sgst: (item.sellingPrice / 1.03) * 0.015,
+    igst: 0,
+    totalTax: (item.sellingPrice / 1.03) * 0.03,
+    totalPrice: item.sellingPrice,
+  };
+}
+
+export const demoInvoices: Invoice[] = [
+  {
+    id: 'inv-001', invoiceNumber: 'INV-2611-0001', date: '2026-11-01T10:30:00',
+    customerId: 'cust-001', customerName: 'Meena Raghavan', customerMobile: '9876543001', customerAddress: '15, Anna Nagar, Chennai',
+    items: [createInvoiceItem(demoJewelleryItems[20])], // Lotus Ring R4 sold
+    subtotal: 42098, discount: 0, taxableAmount: 40872, cgst: 613, sgst: 613, igst: 0, totalTax: 1226,
+    additionalCharges: 0, grandTotal: 42098, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 42098,
+    payments: [{ id: 'pay-001', invoiceId: 'inv-001', invoiceNumber: 'INV-2611-0001', customerId: 'cust-001', customerName: 'Meena Raghavan', method: 'UPI', amount: 42098, referenceNumber: 'UPI-REF-001', date: '2026-11-01T10:35:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-01T10:30:00',
+  },
+  {
+    id: 'inv-002', invoiceNumber: 'INV-2611-0002', date: '2026-11-03T14:15:00',
+    customerId: 'cust-002', customerName: 'Suresh Iyer', customerMobile: '9876543002',
+    items: [createInvoiceItem(demoJewelleryItems[21])], // Rope Chain 22inch sold
+    subtotal: 231413, discount: 0, taxableAmount: 224673, cgst: 3370, sgst: 3370, igst: 0, totalTax: 6740,
+    additionalCharges: 0, grandTotal: 231413, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 231413,
+    payments: [
+      { id: 'pay-002a', invoiceId: 'inv-002', invoiceNumber: 'INV-2611-0002', customerId: 'cust-002', customerName: 'Suresh Iyer', method: 'Cash', amount: 100000, date: '2026-11-03T14:20:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' },
+      { id: 'pay-002b', invoiceId: 'inv-002', invoiceNumber: 'INV-2611-0002', customerId: 'cust-002', customerName: 'Suresh Iyer', method: 'Card', amount: 116413, referenceNumber: 'CARD-REF-001', date: '2026-11-03T14:22:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' },
+    ],
+    paymentStatus: 'Partial', cashierName: 'Priya Sharma', cashierId: 'staff-002', notes: 'Balance ₹15,000 pending', createdAt: '2026-11-03T14:15:00',
+  },
+  {
+    id: 'inv-003', invoiceNumber: 'INV-2611-0003', date: '2026-11-05T11:00:00',
+    customerId: 'cust-003', customerName: 'Lakshmi Venkatesh', customerMobile: '9876543003',
+    items: [createInvoiceItem(demoJewelleryItems[22], 2)], // 2 gold coins
+    subtotal: 158400, discount: 0, taxableAmount: 153786, cgst: 2307, sgst: 2307, igst: 0, totalTax: 4614,
+    additionalCharges: 0, grandTotal: 158400, loyaltyPointsRedeemed: 200, loyaltyRedemptionValue: 200, amountPayable: 158200,
+    payments: [{ id: 'pay-003', invoiceId: 'inv-003', invoiceNumber: 'INV-2611-0003', customerId: 'cust-003', customerName: 'Lakshmi Venkatesh', method: 'Bank Transfer', amount: 158200, referenceNumber: 'NEFT-REF-001', date: '2026-11-05T11:30:00', cashierId: 'staff-003', cashierName: 'Arun Patel' }],
+    paymentStatus: 'Paid', cashierName: 'Arun Patel', cashierId: 'staff-003', createdAt: '2026-11-05T11:00:00',
+  },
+  {
+    id: 'inv-004', invoiceNumber: 'INV-2611-0004', date: '2026-11-07T16:45:00',
+    customerId: 'cust-005', customerName: 'Anjali Krishnan', customerMobile: '9876543005',
+    items: [createInvoiceItem(demoJewelleryItems[23])], // Mangalsutra WM2
+    subtotal: 128750, discount: 2000, taxableAmount: 123058, cgst: 1846, sgst: 1846, igst: 0, totalTax: 3692,
+    additionalCharges: 0, grandTotal: 126750, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 126750,
+    payments: [
+      { id: 'pay-004a', invoiceId: 'inv-004', invoiceNumber: 'INV-2611-0004', customerId: 'cust-005', customerName: 'Anjali Krishnan', method: 'Cash', amount: 50000, date: '2026-11-07T16:50:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' },
+      { id: 'pay-004b', invoiceId: 'inv-004', invoiceNumber: 'INV-2611-0004', customerId: 'cust-005', customerName: 'Anjali Krishnan', method: 'UPI', amount: 68250, referenceNumber: 'UPI-REF-002', date: '2026-11-07T16:52:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' },
+    ],
+    paymentStatus: 'Partial', cashierName: 'Priya Sharma', cashierId: 'staff-002', notes: 'Balance ₹8,500 due', createdAt: '2026-11-07T16:45:00',
+  },
+  {
+    id: 'inv-005', invoiceNumber: 'INV-2611-0005', date: '2026-11-08T10:00:00',
+    customerId: 'cust-004', customerName: 'Karthik Raman', customerMobile: '9876543004',
+    items: [createInvoiceItem(demoJewelleryItems[24])], // Diamond earrings 0.3ct
+    subtotal: 82500, discount: 0, taxableAmount: 80097, cgst: 1201, sgst: 1201, igst: 0, totalTax: 2403,
+    additionalCharges: 0, grandTotal: 82500, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 82500,
+    payments: [{ id: 'pay-005', invoiceId: 'inv-005', invoiceNumber: 'INV-2611-0005', customerId: 'cust-004', customerName: 'Karthik Raman', method: 'Card', amount: 82500, referenceNumber: 'CARD-REF-002', date: '2026-11-08T10:15:00', cashierId: 'staff-003', cashierName: 'Arun Patel' }],
+    paymentStatus: 'Paid', cashierName: 'Arun Patel', cashierId: 'staff-003', createdAt: '2026-11-08T10:00:00',
+  },
+  {
+    id: 'inv-006', invoiceNumber: 'INV-2611-0006', date: '2026-11-10T12:30:00',
+    customerName: 'Walk-in Customer', items: [createInvoiceItem(demoJewelleryItems[18], 3)], // 3 x 5g coins
+    subtotal: 118950, discount: 0, taxableAmount: 115485, cgst: 1732, sgst: 1732, igst: 0, totalTax: 3465,
+    additionalCharges: 0, grandTotal: 118950, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 118950,
+    payments: [{ id: 'pay-006', invoiceId: 'inv-006', invoiceNumber: 'INV-2611-0006', customerName: 'Walk-in Customer', method: 'Cash', amount: 118950, date: '2026-11-10T12:35:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-10T12:30:00',
+  },
+  {
+    id: 'inv-007', invoiceNumber: 'INV-2611-0007', date: '2026-11-12T15:00:00',
+    customerId: 'cust-006', customerName: 'Ramesh Sundaram', customerMobile: '9876543006', customerGstin: '33BBBPR1234Q1ZX',
+    items: [createInvoiceItem(demoJewelleryItems[0]), createInvoiceItem(demoJewelleryItems[13])], // Necklace A1 + Jhumka
+    subtotal: 527343, discount: 5000, taxableAmount: 507129, cgst: 7607, sgst: 7607, igst: 0, totalTax: 15214,
+    additionalCharges: 0, grandTotal: 522343, loyaltyPointsRedeemed: 500, loyaltyRedemptionValue: 500, amountPayable: 521843,
+    payments: [{ id: 'pay-007', invoiceId: 'inv-007', invoiceNumber: 'INV-2611-0007', customerId: 'cust-006', customerName: 'Ramesh Sundaram', method: 'Bank Transfer', amount: 521843, referenceNumber: 'RTGS-REF-001', date: '2026-11-12T15:30:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-12T15:00:00',
+  },
+  {
+    id: 'inv-008', invoiceNumber: 'INV-2611-0008', date: '2026-11-14T11:15:00',
+    customerId: 'cust-008', customerName: 'Vijay Anand', customerMobile: '9876543008',
+    items: [createInvoiceItem(demoJewelleryItems[11])], // Platinum ring
+    subtotal: 30430, discount: 0, taxableAmount: 29544, cgst: 443, sgst: 443, igst: 0, totalTax: 886,
+    additionalCharges: 0, grandTotal: 30430, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 30430,
+    payments: [{ id: 'pay-008', invoiceId: 'inv-008', invoiceNumber: 'INV-2611-0008', customerId: 'cust-008', customerName: 'Vijay Anand', method: 'UPI', amount: 30430, referenceNumber: 'UPI-REF-003', date: '2026-11-14T11:20:00', cashierId: 'staff-003', cashierName: 'Arun Patel' }],
+    paymentStatus: 'Paid', cashierName: 'Arun Patel', cashierId: 'staff-003', createdAt: '2026-11-14T11:15:00',
+  },
+  {
+    id: 'inv-009', invoiceNumber: 'INV-2611-0009', date: '2026-11-15T09:45:00',
+    customerId: 'cust-009', customerName: 'Preethi Murugan', customerMobile: '9876543009',
+    items: [createInvoiceItem(demoJewelleryItems[2])], // Lotus Ring R1
+    subtotal: 43782, discount: 0, taxableAmount: 42507, cgst: 638, sgst: 638, igst: 0, totalTax: 1275,
+    additionalCharges: 0, grandTotal: 43782, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 43782,
+    payments: [{ id: 'pay-009', invoiceId: 'inv-009', invoiceNumber: 'INV-2611-0009', customerId: 'cust-009', customerName: 'Preethi Murugan', method: 'Cash', amount: 43782, date: '2026-11-15T09:50:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-15T09:45:00',
+  },
+  {
+    id: 'inv-010', invoiceNumber: 'INV-2611-0010', date: '2026-11-16T13:00:00',
+    customerId: 'cust-010', customerName: 'Ganesh Bharathi', customerMobile: '9876543010',
+    items: [createInvoiceItem(demoJewelleryItems[8])], // Lakshmi Pendant LP1
+    subtotal: 74200, discount: 0, taxableAmount: 72039, cgst: 1081, sgst: 1081, igst: 0, totalTax: 2161,
+    additionalCharges: 0, grandTotal: 74200, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 74200,
+    payments: [
+      { id: 'pay-010a', invoiceId: 'inv-010', invoiceNumber: 'INV-2611-0010', customerId: 'cust-010', customerName: 'Ganesh Bharathi', method: 'Cash', amount: 50000, date: '2026-11-16T13:05:00', cashierId: 'staff-003', cashierName: 'Arun Patel' },
+      { id: 'pay-010b', invoiceId: 'inv-010', invoiceNumber: 'INV-2611-0010', customerId: 'cust-010', customerName: 'Ganesh Bharathi', method: 'UPI', amount: 19200, referenceNumber: 'UPI-REF-004', date: '2026-11-16T13:08:00', cashierId: 'staff-003', cashierName: 'Arun Patel' },
+    ],
+    paymentStatus: 'Partial', cashierName: 'Arun Patel', cashierId: 'staff-003', notes: 'Balance ₹5,000 pending', createdAt: '2026-11-16T13:00:00',
+  },
+  {
+    id: 'inv-011', invoiceNumber: 'INV-2611-0011', date: '2026-11-17T10:30:00',
+    customerId: 'cust-011', customerName: 'Saroja Devi', customerMobile: '9876543011',
+    items: [createInvoiceItem(demoJewelleryItems[5])], // Bridal Bangle Set Medium
+    subtotal: 648250, discount: 10000, taxableAmount: 619660, cgst: 9295, sgst: 9295, igst: 0, totalTax: 18590,
+    additionalCharges: 0, grandTotal: 638250, loyaltyPointsRedeemed: 1000, loyaltyRedemptionValue: 1000, amountPayable: 637250,
+    payments: [{ id: 'pay-011', invoiceId: 'inv-011', invoiceNumber: 'INV-2611-0011', customerId: 'cust-011', customerName: 'Saroja Devi', method: 'Bank Transfer', amount: 637250, referenceNumber: 'NEFT-REF-002', date: '2026-11-17T11:00:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-17T10:30:00',
+  },
+  {
+    id: 'inv-012', invoiceNumber: 'INV-2611-0012', date: '2026-11-18T14:00:00',
+    customerId: 'cust-013', customerName: 'Revathi Shankar', customerMobile: '9876543013',
+    items: [createInvoiceItem(demoJewelleryItems[12])], // Tennis Bracelet
+    subtotal: 362500, discount: 5000, taxableAmount: 347087, cgst: 5206, sgst: 5206, igst: 0, totalTax: 10412,
+    additionalCharges: 0, grandTotal: 357500, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 357500,
+    payments: [{ id: 'pay-012', invoiceId: 'inv-012', invoiceNumber: 'INV-2611-0012', customerId: 'cust-013', customerName: 'Revathi Shankar', method: 'Card', amount: 357500, referenceNumber: 'CARD-REF-003', date: '2026-11-18T14:15:00', cashierId: 'staff-003', cashierName: 'Arun Patel' }],
+    paymentStatus: 'Paid', cashierName: 'Arun Patel', cashierId: 'staff-003', createdAt: '2026-11-18T14:00:00',
+  },
+  {
+    id: 'inv-013', invoiceNumber: 'INV-2611-0013', date: '2026-11-19T11:30:00',
+    customerId: 'cust-003', customerName: 'Lakshmi Venkatesh', customerMobile: '9876543003',
+    items: [createInvoiceItem(demoJewelleryItems[9])], // Mangalsutra WM1
+    subtotal: 106500, discount: 0, taxableAmount: 103398, cgst: 1551, sgst: 1551, igst: 0, totalTax: 3102,
+    additionalCharges: 0, grandTotal: 106500, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 106500,
+    payments: [{ id: 'pay-013', invoiceId: 'inv-013', invoiceNumber: 'INV-2611-0013', customerId: 'cust-003', customerName: 'Lakshmi Venkatesh', method: 'Cash', amount: 106500, date: '2026-11-19T11:35:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-19T11:30:00',
+  },
+  {
+    id: 'inv-014', invoiceNumber: 'INV-2611-0014', date: '2026-11-20T16:00:00',
+    customerId: 'cust-015', customerName: 'Padma Narayanan', customerMobile: '9876543015',
+    items: [createInvoiceItem(demoJewelleryItems[1]), createInvoiceItem(demoJewelleryItems[17])], // Necklace A2 + Jhumka JK2
+    subtotal: 537406, discount: 8000, taxableAmount: 514180, cgst: 7713, sgst: 7713, igst: 0, totalTax: 15425,
+    additionalCharges: 0, grandTotal: 529406, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 529406,
+    payments: [
+      { id: 'pay-014a', invoiceId: 'inv-014', invoiceNumber: 'INV-2611-0014', customerId: 'cust-015', customerName: 'Padma Narayanan', method: 'Cash', amount: 200000, date: '2026-11-20T16:10:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' },
+      { id: 'pay-014b', invoiceId: 'inv-014', invoiceNumber: 'INV-2611-0014', customerId: 'cust-015', customerName: 'Padma Narayanan', method: 'Bank Transfer', amount: 244406, referenceNumber: 'NEFT-REF-003', date: '2026-11-20T16:15:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' },
+    ],
+    paymentStatus: 'Partial', cashierName: 'Priya Sharma', cashierId: 'staff-002', notes: 'Balance ₹85,000 against account', createdAt: '2026-11-20T16:00:00',
+  },
+  {
+    id: 'inv-015', invoiceNumber: 'INV-2611-0015', date: '2026-11-21T09:00:00',
+    customerId: 'cust-001', customerName: 'Meena Raghavan', customerMobile: '9876543001',
+    items: [createInvoiceItem(demoJewelleryItems[14])], // Lotus Ring R3
+    subtotal: 40414, discount: 0, taxableAmount: 39236, cgst: 589, sgst: 589, igst: 0, totalTax: 1178,
+    additionalCharges: 0, grandTotal: 40414, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 40414,
+    payments: [{ id: 'pay-015', invoiceId: 'inv-015', invoiceNumber: 'INV-2611-0015', customerId: 'cust-001', customerName: 'Meena Raghavan', method: 'UPI', amount: 40414, referenceNumber: 'UPI-REF-005', date: '2026-11-21T09:10:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-21T09:00:00',
+  },
+  // Additional invoices for variety
+  {
+    id: 'inv-016', invoiceNumber: 'INV-2611-0016', date: '2026-11-21T11:00:00',
+    customerId: 'cust-007', customerName: 'Divya Prakash', customerMobile: '9876543007',
+    items: [createInvoiceItem(demoJewelleryItems[7])], // Silver Anklet
+    subtotal: 12850, discount: 0, taxableAmount: 12476, cgst: 187, sgst: 187, igst: 0, totalTax: 374,
+    additionalCharges: 0, grandTotal: 12850, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 12850,
+    payments: [{ id: 'pay-016', invoiceId: 'inv-016', invoiceNumber: 'INV-2611-0016', customerId: 'cust-007', customerName: 'Divya Prakash', method: 'Cash', amount: 12850, date: '2026-11-21T11:05:00', cashierId: 'staff-003', cashierName: 'Arun Patel' }],
+    paymentStatus: 'Paid', cashierName: 'Arun Patel', cashierId: 'staff-003', createdAt: '2026-11-21T11:00:00',
+  },
+  {
+    id: 'inv-017', invoiceNumber: 'INV-2611-0017', date: '2026-11-21T13:30:00',
+    customerId: 'cust-012', customerName: 'Ashwin Kumar', customerMobile: '9876543012',
+    items: [createInvoiceItem(demoJewelleryItems[18], 2)], // 2 x 5g gold coins
+    subtotal: 79300, discount: 0, taxableAmount: 77000, cgst: 1155, sgst: 1155, igst: 0, totalTax: 2310,
+    additionalCharges: 0, grandTotal: 79300, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 79300,
+    payments: [{ id: 'pay-017', invoiceId: 'inv-017', invoiceNumber: 'INV-2611-0017', customerId: 'cust-012', customerName: 'Ashwin Kumar', method: 'Cash', amount: 79300, date: '2026-11-21T13:35:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-21T13:30:00',
+  },
+  {
+    id: 'inv-018', invoiceNumber: 'INV-2611-0018', date: '2026-11-21T15:00:00',
+    customerId: 'cust-006', customerName: 'Ramesh Sundaram', customerMobile: '9876543006', customerGstin: '33BBBPR1234Q1ZX',
+    items: [createInvoiceItem(demoJewelleryItems[4]), createInvoiceItem(demoJewelleryItems[3])], // Chain 20inch + Ring R2
+    subtotal: 257525, discount: 3000, taxableAmount: 247112, cgst: 3707, sgst: 3707, igst: 0, totalTax: 7414,
+    additionalCharges: 0, grandTotal: 254525, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 254525,
+    payments: [{ id: 'pay-018', invoiceId: 'inv-018', invoiceNumber: 'INV-2611-0018', customerId: 'cust-006', customerName: 'Ramesh Sundaram', method: 'Bank Transfer', amount: 254525, referenceNumber: 'RTGS-REF-002', date: '2026-11-21T15:15:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-21T15:00:00',
+  },
+  {
+    id: 'inv-019', invoiceNumber: 'INV-2611-0019', date: '2026-11-21T16:30:00',
+    customerId: 'cust-014', customerName: 'Mohan Das', customerMobile: '9876543014',
+    items: [createInvoiceItem(demoJewelleryItems[19])], // Lakshmi Pendant LP2
+    subtotal: 103650, discount: 0, taxableAmount: 100631, cgst: 1509, sgst: 1509, igst: 0, totalTax: 3019,
+    additionalCharges: 0, grandTotal: 103650, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 103650,
+    payments: [{ id: 'pay-019', invoiceId: 'inv-019', invoiceNumber: 'INV-2611-0019', customerId: 'cust-014', customerName: 'Mohan Das', method: 'UPI', amount: 103650, referenceNumber: 'UPI-REF-006', date: '2026-11-21T16:35:00', cashierId: 'staff-003', cashierName: 'Arun Patel' }],
+    paymentStatus: 'Paid', cashierName: 'Arun Patel', cashierId: 'staff-003', createdAt: '2026-11-21T16:30:00',
+  },
+  {
+    id: 'inv-020', invoiceNumber: 'INV-2611-0020', date: '2026-11-21T18:00:00',
+    customerName: 'Walk-in Customer',
+    items: [createInvoiceItem(demoJewelleryItems[10], 1)], // 1 x 10g coin
+    subtotal: 79200, discount: 0, taxableAmount: 76893, cgst: 1153, sgst: 1153, igst: 0, totalTax: 2307,
+    additionalCharges: 0, grandTotal: 79200, loyaltyPointsRedeemed: 0, loyaltyRedemptionValue: 0, amountPayable: 79200,
+    payments: [{ id: 'pay-020', invoiceId: 'inv-020', invoiceNumber: 'INV-2611-0020', customerName: 'Walk-in Customer', method: 'Cash', amount: 79200, date: '2026-11-21T18:05:00', cashierId: 'staff-002', cashierName: 'Priya Sharma' }],
+    paymentStatus: 'Paid', cashierName: 'Priya Sharma', cashierId: 'staff-002', createdAt: '2026-11-21T18:00:00',
+  },
+];
+
+// ================================================================
+// RETURNS
+// ================================================================
+export const demoReturns: ReturnRecord[] = [
+  {
+    id: 'ret-001', returnNumber: 'RET-2611-0001',
+    originalInvoiceId: 'inv-009', originalInvoiceNumber: 'INV-2611-0009',
+    customerId: 'cust-009', customerName: 'Preethi Murugan', date: '2026-11-18T10:00:00',
+    items: [{
+      id: 'ri-001', jewelleryItemId: 'item-003', name: 'Lotus Ring - R1', itemCode: 'JW100003',
+      originalPrice: 43782, refundAmount: 42098, reason: 'Customer Request',
+    }],
+    totalRefundAmount: 42098, refundMethod: 'Store Credit', reason: 'Customer Request',
+    notes: 'Customer preferred a different size', cashierId: 'staff-002', cashierName: 'Priya Sharma',
+    creditNoteId: 'cn-001',
+  },
+];
+
+// ================================================================
+// CREDIT NOTES
+// ================================================================
+export const demoCreditNotes: CreditNote[] = [
+  {
+    id: 'cn-001', creditNoteNumber: 'CN-2611-0001',
+    originalInvoiceId: 'inv-009', originalInvoiceNumber: 'INV-2611-0009',
+    customerId: 'cust-009', customerName: 'Preethi Murugan',
+    date: '2026-11-18T10:00:00', amount: 42098, reason: 'Return - Customer Request',
+    usedAmount: 0, remainingAmount: 42098, isActive: true,
+  },
+];
+
+// ================================================================
+// OLD GOLD EXCHANGES
+// ================================================================
+export const demoOldGoldExchanges: OldGoldExchange[] = [
+  {
+    id: 'og-001', exchangeNumber: 'OG-2611-0001',
+    customerId: 'cust-011', customerName: 'Saroja Devi', date: '2026-11-17T10:00:00',
+    metalType: 'Gold', declaredPurity: '22K', testedPurity: '22K',
+    grossWeight: 15.000, stoneWeight: 0.500, netWeight: 14.500,
+    applicableRate: 7195, deductions: 500, finalExchangeValue: 103878,
+    againstInvoiceId: 'inv-011', againstInvoiceNumber: 'INV-2611-0011',
+    settlementType: 'Against Purchase', staffNotes: 'Old necklace exchanged against bridal bangle set purchase',
+    cashierId: 'staff-002', cashierName: 'Priya Sharma',
+  },
+];
+
+// ================================================================
+// EXCHANGES
+// ================================================================
+export const demoExchanges: ExchangeRecord[] = [];
+
+// ================================================================
+// LEDGER ENTRIES
+// ================================================================
+export const demoLedgerEntries: LedgerEntry[] = [
+  { id: 'le-001', customerId: 'cust-002', date: '2026-11-03T14:15:00', description: 'Invoice INV-2611-0002', referenceId: 'inv-002', referenceType: 'Invoice', debit: 231413, credit: 0, balance: 231413 },
+  { id: 'le-002', customerId: 'cust-002', date: '2026-11-03T14:20:00', description: 'Payment - Cash', referenceId: 'pay-002a', referenceType: 'Payment', debit: 0, credit: 100000, balance: 131413 },
+  { id: 'le-003', customerId: 'cust-002', date: '2026-11-03T14:22:00', description: 'Payment - Card', referenceId: 'pay-002b', referenceType: 'Payment', debit: 0, credit: 116413, balance: 15000 },
+  { id: 'le-004', customerId: 'cust-005', date: '2026-11-07T16:45:00', description: 'Invoice INV-2611-0004', referenceId: 'inv-004', referenceType: 'Invoice', debit: 126750, credit: 0, balance: 126750 },
+  { id: 'le-005', customerId: 'cust-005', date: '2026-11-07T16:50:00', description: 'Payment - Cash', referenceId: 'pay-004a', referenceType: 'Payment', debit: 0, credit: 50000, balance: 76750 },
+  { id: 'le-006', customerId: 'cust-005', date: '2026-11-07T16:52:00', description: 'Payment - UPI', referenceId: 'pay-004b', referenceType: 'Payment', debit: 0, credit: 68250, balance: 8500 },
+];
+
+// ================================================================
+// LOYALTY TRANSACTIONS
+// ================================================================
+export const demoLoyaltyTransactions: LoyaltyTransaction[] = [
+  { id: 'lt-001', customerId: 'cust-001', date: '2026-11-01T10:35:00', type: 'Earned', points: 42, referenceId: 'inv-001', referenceType: 'Invoice', description: 'Purchase INV-2611-0001', balance: 2492 },
+  { id: 'lt-002', customerId: 'cust-003', date: '2026-11-05T11:30:00', type: 'Redeemed', points: 200, referenceId: 'inv-003', referenceType: 'Invoice', description: 'Redeemed on INV-2611-0003', balance: 5000 },
+  { id: 'lt-003', customerId: 'cust-003', date: '2026-11-05T11:30:00', type: 'Earned', points: 158, referenceId: 'inv-003', referenceType: 'Invoice', description: 'Purchase INV-2611-0003', balance: 5158 },
+  { id: 'lt-004', customerId: 'cust-006', date: '2026-11-12T15:30:00', type: 'Redeemed', points: 500, referenceId: 'inv-007', referenceType: 'Invoice', description: 'Redeemed on INV-2611-0007', balance: 8400 },
+  { id: 'lt-005', customerId: 'cust-006', date: '2026-11-12T15:30:00', type: 'Earned', points: 522, referenceId: 'inv-007', referenceType: 'Invoice', description: 'Purchase INV-2611-0007', balance: 8922 },
+  { id: 'lt-006', customerId: 'cust-011', date: '2026-11-17T11:00:00', type: 'Redeemed', points: 1000, referenceId: 'inv-011', referenceType: 'Invoice', description: 'Redeemed on INV-2611-0011', balance: 5100 },
+  { id: 'lt-007', customerId: 'cust-011', date: '2026-11-17T11:00:00', type: 'Earned', points: 638, referenceId: 'inv-011', referenceType: 'Invoice', description: 'Purchase INV-2611-0011', balance: 5738 },
+  { id: 'lt-008', customerId: 'cust-001', date: '2026-11-21T09:10:00', type: 'Earned', points: 40, referenceId: 'inv-015', referenceType: 'Invoice', description: 'Purchase INV-2611-0015', balance: 2532 },
+];
+
+// ================================================================
+// DAILY CLOSINGS
+// ================================================================
+export const demoDailyClosings: DailyClosing[] = [
+  {
+    id: 'dc-001', date: '2026-11-20', openingCash: 50000,
+    cashSales: 200000, upiCollections: 0, cardCollections: 0, bankTransfers: 244406,
+    cashRefunds: 0, cashExpenses: 2500, expectedClosingCash: 247500, actualClosingCash: 247300,
+    cashDifference: -200, totalInvoices: 1, totalReturns: 0,
+    closingNotes: 'Minor variance - will reconcile', closedBy: 'Priya Sharma', closedAt: '2026-11-20T19:30:00', status: 'Closed',
+  },
+];
+
+// ================================================================
+// REPAIR ORDERS
+// ================================================================
+export const demoRepairOrders: RepairOrder[] = [
+  {
+    id: 'rep-001', repairNumber: 'REP-2611-0001',
+    customerId: 'cust-008', customerName: 'Vijay Anand', customerMobile: '9876543008',
+    itemDescription: 'Gold chain - broken clasp repair', repairCategory: 'Chain Repair',
+    receivedDate: '2026-11-15', expectedDeliveryDate: '2026-11-22',
+    estimatedCharge: 1500, advancePayment: 500, remainingBalance: 1000,
+    status: 'In Progress', staffNotes: 'Clasp needs replacement, ordered new 22K clasp',
+    cashierId: 'staff-003', cashierName: 'Arun Patel',
+  },
+  {
+    id: 'rep-002', repairNumber: 'REP-2611-0002',
+    customerId: 'cust-013', customerName: 'Revathi Shankar', customerMobile: '9876543013',
+    itemDescription: 'Ring resizing from 16 to 14', repairCategory: 'Ring Resizing',
+    receivedDate: '2026-11-18', expectedDeliveryDate: '2026-11-25',
+    estimatedCharge: 800, advancePayment: 0, remainingBalance: 800,
+    status: 'Received', staffNotes: 'Customer wants the ring reduced by 2 sizes',
+    cashierId: 'staff-002', cashierName: 'Priya Sharma',
+  },
+  {
+    id: 'rep-003', repairNumber: 'REP-2611-0003',
+    customerId: 'cust-004', customerName: 'Karthik Raman', customerMobile: '9876543004',
+    itemDescription: 'Bangle polish and rhodium plating', repairCategory: 'Polish & Plating',
+    receivedDate: '2026-11-10', expectedDeliveryDate: '2026-11-17',
+    estimatedCharge: 2000, advancePayment: 1000, remainingBalance: 1000,
+    status: 'Ready for Collection', staffNotes: 'Work completed, customer notified',
+    cashierId: 'staff-003', cashierName: 'Arun Patel',
+  },
+];
+
+// ================================================================
+// LABEL TEMPLATES
+// ================================================================
+export const demoLabelTemplates: LabelTemplate[] = [
+  {
+    id: 'lt-001', name: 'Standard Jewellery Tag', type: 'jewellery_tag', width: 50, height: 25, isDefault: true,
+    fields: [
+      { key: 'storeName', label: 'Store Name', enabled: true, fontSize: 6 },
+      { key: 'productName', label: 'Product Name', enabled: true, fontSize: 7 },
+      { key: 'itemCode', label: 'Item Code', enabled: true, fontSize: 6 },
+      { key: 'barcode', label: 'Barcode', enabled: true },
+      { key: 'metalType', label: 'Metal', enabled: true, fontSize: 6 },
+      { key: 'purity', label: 'Purity', enabled: true, fontSize: 7 },
+      { key: 'grossWeight', label: 'Gross Wt', enabled: true, fontSize: 7 },
+      { key: 'netWeight', label: 'Net Wt', enabled: true, fontSize: 7 },
+      { key: 'sellingPrice', label: 'Price', enabled: true, fontSize: 8 },
+      { key: 'huid', label: 'HUID', enabled: true, fontSize: 6 },
+      { key: 'designCode', label: 'Design Code', enabled: false, fontSize: 6 },
+      { key: 'stoneWeight', label: 'Stone Wt', enabled: false, fontSize: 6 },
+    ],
+  },
+  {
+    id: 'lt-002', name: 'Compact Tag', type: 'jewellery_tag', width: 40, height: 20, isDefault: false,
+    fields: [
+      { key: 'storeName', label: 'Store Name', enabled: false },
+      { key: 'productName', label: 'Product Name', enabled: true, fontSize: 6 },
+      { key: 'itemCode', label: 'Item Code', enabled: true, fontSize: 5 },
+      { key: 'barcode', label: 'Barcode', enabled: true },
+      { key: 'metalType', label: 'Metal', enabled: false },
+      { key: 'purity', label: 'Purity', enabled: true, fontSize: 6 },
+      { key: 'grossWeight', label: 'Gross Wt', enabled: true, fontSize: 6 },
+      { key: 'netWeight', label: 'Net Wt', enabled: false },
+      { key: 'sellingPrice', label: 'Price', enabled: true, fontSize: 7 },
+      { key: 'huid', label: 'HUID', enabled: false },
+      { key: 'designCode', label: 'Design Code', enabled: false },
+      { key: 'stoneWeight', label: 'Stone Wt', enabled: false },
+    ],
+  },
+  {
+    id: 'lt-003', name: 'Product Box Label', type: 'product_label', width: 70, height: 40, isDefault: false,
+    fields: [
+      { key: 'storeName', label: 'Store Name', enabled: true, fontSize: 9 },
+      { key: 'productName', label: 'Product Name', enabled: true, fontSize: 10 },
+      { key: 'itemCode', label: 'Item Code', enabled: true, fontSize: 8 },
+      { key: 'barcode', label: 'Barcode', enabled: true },
+      { key: 'metalType', label: 'Metal', enabled: true, fontSize: 8 },
+      { key: 'purity', label: 'Purity', enabled: true, fontSize: 9 },
+      { key: 'grossWeight', label: 'Gross Wt', enabled: true, fontSize: 9 },
+      { key: 'netWeight', label: 'Net Wt', enabled: true, fontSize: 9 },
+      { key: 'sellingPrice', label: 'Price', enabled: true, fontSize: 10 },
+      { key: 'huid', label: 'HUID', enabled: true, fontSize: 8 },
+      { key: 'designCode', label: 'Design Code', enabled: true, fontSize: 8 },
+      { key: 'stoneWeight', label: 'Stone Wt', enabled: true, fontSize: 8 },
+    ],
+  },
+];
+
+// ================================================================
+// NOTIFICATIONS
+// ================================================================
+export const demoNotifications: AppNotification[] = [
+  { id: 'notif-001', title: 'Low Stock Alert', message: 'Gold Coin 10g stock is running low (15 remaining)', type: 'warning', read: false, date: '2026-11-21T08:00:00', link: '/catalogue' },
+  { id: 'notif-002', title: 'Repair Ready', message: 'Repair order REP-2611-0003 is ready for collection', type: 'success', read: false, date: '2026-11-21T09:00:00', link: '/repairs' },
+  { id: 'notif-003', title: 'Outstanding Payment', message: 'Suresh Iyer has ₹15,000 pending from INV-2611-0002', type: 'info', read: true, date: '2026-11-20T18:00:00', link: '/payments' },
+  { id: 'notif-004', title: 'Gold Rate Updated', message: 'Gold 24K rate updated to ₹7,850/g', type: 'info', read: true, date: '2026-11-21T10:00:00' },
+];
